@@ -921,7 +921,7 @@ codespan(MMIOT *f, int size)
     int i=0;
 
     if ( size > 1 && peek(f, size-1) == ' ' ) --size;
-    if ( peek(f,i) == ' ' ) ++i, --size;
+    if ( peek(f,i) == ' ' ) {++i; --size;}
     
     Qstring("<code>", f);
     code(f, cursor(f)+(i-1), size);
@@ -966,7 +966,7 @@ maybe_address(char *p, int size)
     if ( ! (size && *p == '@') )
 	return 0;
     
-    --size, ++p;
+    --size; ++p;
 
     if ( size && *p == '.' ) return 0;
     
