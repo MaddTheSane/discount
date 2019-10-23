@@ -1197,7 +1197,7 @@ compile_document(Line *ptr, MMIOT *f)
     ParagraphRoot d = { 0, 0 };
     Cache source = { 0, 0 };
     Paragraph *p = 0;
-    struct kw *tag;
+    struct kw *tag = NULL;
     int eaten, unclosed;
     int previous_was_break = 1;
 
@@ -1263,7 +1263,7 @@ first_nonblank_before(Line *j, int dle)
 static int
 actually_a_table(MMIOT *f, Line *pp)
 {
-    Line *r;
+    Line *r=NULL;
     int j;
     int c;
 
@@ -1367,7 +1367,7 @@ compile(Line *ptr, int toplevel, MMIOT *f)
 	else {
 	    /* either markup or an html block element
 	     */
-	    struct kw *tag;
+	    struct kw *tag = NULL;
 	    int unclosed = 1;
 
 	    p = Pp(&d, ptr, MARKUP);	/* default to regular markup,

@@ -594,7 +594,7 @@ pseudo(Cstring t)
 static void
 printlinkyref(MMIOT *f, linkytype *tag, char *link, int size)
 {
-    char *edit;
+    char *edit = NULL;
     
     if ( is_flag_set(f->flags, IS_LABEL) )
 	return;
@@ -858,7 +858,7 @@ nrticks(int offset, int tickchar, MMIOT *f)
 static int
 matchticks(MMIOT *f, int tickchar, int ticks, int *endticks)
 {
-    int size, count, c;
+    int size, count=0, c;
     int subsize=0, subtick=0;
     
     *endticks = ticks;
@@ -1278,7 +1278,7 @@ mathhandler(MMIOT *f, int e1, int e2)
 static int
 tickhandler(MMIOT *f, int tickchar, int minticks, int allow_space, spanhandler spanner)
 {
-    int endticks, size;
+    int endticks = 0, size = 0;
     int tick = nrticks(0, tickchar, f);
 
     if ( !allow_space && isspace(peek(f,tick)) )
