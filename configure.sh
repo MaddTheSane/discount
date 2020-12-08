@@ -45,12 +45,11 @@ locals() {
     --CXX-BINDING)
 		echo CXX_BINDING=T
 		;;
-    --GITHUB-CHECKBOX)
-		echo GITHUB_CHECKBOX=T
+    --GITHUB-CHECKBOX=ENTITY)
+		echo GITHUB_CHECKBOX_STYLE=entity
 		;;
     --GITHUB-CHECKBOX=INPUT)
-		echo GITHUB_CHECKBOX=T
-		echo GITHUB_CHECKBOX_AS_INPUT=T
+		echo GITHUB_CHECKBOX_STYLE=input
 		;;
     esac
 }
@@ -69,20 +68,14 @@ AC_INIT $TARGET
 AC_SUB 'PACKAGE_NAME' lib$TARGET
 AC_SUB 'PACKAGE_VERSION' $VERSION
 
-for banned_with in dl fenced-code id-anchor github-tags urlencoded-anchor; do
-    banned_with_variable_ref=\$WITH_`echo "$banned_with" | $AC_UPPERCASE | tr - _`
-    if [ "`eval echo "$banned_with_variable_ref"`" ]; then
-	LOG "Setting theme default --with-$banned_with."
-    fi
-done
-
-# theme wants the old behavior of --with-(foo)
+# define definition list type defaults (for theme)
 #
 case "`echo "$WITH_DL" | $AC_UPPERCASE`" in
-    EXTRA)         THEME_CF="MKD_DLEXTRA|MKD_NODLDISCOUNT";;
-    BOTH)          THEME_CF="MKD_DLEXTRA";;
+    DISCOUNT)      AC_DEFINE THEME_DL_MODE 1 ;;
+    EXTRA)         AC_DEFINE THEME_DL_MODE 2 ;;
+    BOTH)          AC_DEFINE THEME_DL_MODE 3 ;;
 esac
-test "$WITH_FENCED_CODE" && THEME_CF="${THEME_CF:+$THEME_CF|}MKD_FENCEDCODE"
+test "$WITH_FENCED_CODE" && AC_DEFINE THEME_FENCED_CODE 1
 
 AC_DEFINE THEME_CF "$THEME_CF"
 
@@ -232,9 +225,10 @@ else
     AC_SUB 'H1TITLE' ''
 fi
 
-if [ "$GITHUB_CHECKBOX" ]; then
-    AC_DEFINE 'GITHUB_CHECKBOX' '1'
-    test "$GITHUB_CHECKBOX_AS_INPUT" && AC_DEFINE 'CHECKBOX_AS_INPUT' '1'
+if [ "$GITHUB_CHECKBOX_STYLE" = "entity" ]; then
+    AC_DEFINE 'CHECKBOX_AS_INPUT' '0'
+else
+    AC_DEFINE 'CHECKBOX_AS_INPUT' '1'
 fi
 
 
